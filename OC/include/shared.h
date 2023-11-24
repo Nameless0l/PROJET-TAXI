@@ -7,7 +7,7 @@
 typedef struct Bike
 {
    pid_t pid;
-   int *itinerary;
+   int itinerary[5];
 }Bike;
 
 typedef struct Client

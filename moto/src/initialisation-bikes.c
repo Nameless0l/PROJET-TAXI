@@ -129,7 +129,7 @@ Bike *create_bike()
         return NULL;
 
     // Generating a itinerary filled with a random of 5 consecutives quarters
-    int start = random_integer(0, NB_QUARTER - RADIUS); 
+    int start = random_integer(0, NB_QUARTER - RADIUS);
     
     // Filling consecutives quarters
     for (int i = 0; i < RADIUS; i++)
@@ -149,7 +149,7 @@ void write_infos_bike(Bike *bike)
 
 void create_segment(pid_t pid)
 {
-    shm_id = shmget((key_t)pid, SEG_SIZE, IPC_CREAT | IPC_EXCL | S_IRUSR | S_IWUSR);
+    shm_id = shmget((key_t)pid, SEG_SIZE, IPC_CREAT | 0666);
     shm_zone = shmat(shm_id, NULL, 0);
 }
 

@@ -13,15 +13,15 @@
 #include <sys/shm.h>
 #include <math.h>
 
-#define CREATED_CLIENT 0x0001
-#define CLIENT_GONE 0x0002
+#define CREATED_CLIENT 0x1
+#define CLIENT_GONE 0x2
 #define MAX_WAIT_TIME 10
 #define MIN_WAIT_TIME 3
 #define MAX_PRICE 10000
 #define BIKE_ASSIGNED 0xC
-#define STARTED_COURSE 0x0003
-#define ENDED_COURSE 0x0004
-#define TO_MYSELF 0x0010
+#define STARTED_COURSE 0x3
+#define ENDED_COURSE 0x4
+#define TO_MYSELF 0x10
 #define NB_QUARTER 113
 #define SEG_SIZE 1024
 #define TASK_TIME 1

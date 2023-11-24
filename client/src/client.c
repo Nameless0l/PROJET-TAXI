@@ -71,7 +71,7 @@ int random_integer(int a, int b)
 void create_memory(pid_t client_pid)
 {
     // create shared memory for client
-    int shm_id = shmget((key_t)client_pid, SEG_SIZE, IPC_EXCL | IPC_CREAT | 0666);
+    int shm_id = shmget((key_t)client_pid, SEG_SIZE, IPC_CREAT | 0666);
     if (shm_id == -1)
     {
         perror("Failed to create a shared memory");
@@ -79,7 +79,7 @@ void create_memory(pid_t client_pid)
     }
 
     // Attach physical memory to virtual shared memory
-    shared_mem = shmat(shm_id, NULL, SHM_RND);
+    shared_mem = shmat(shm_id, NULL, 0);
     if (shared_mem == (void *)-1)
     {
         perror("Failed to attach a physic memory to the virtual chared memory created among"); // print error message if it failed
@@ -96,14 +96,14 @@ void write_client_infos(Client *client)
 
 void free_shm(pid_t client_pid)
 {
-    int shm_id = shmget((key_t)client_pid, SEG_SIZE, IPC_EXCL | IPC_CREAT | 0666);
+    int shm_id = shmget((key_t)client_pid, SEG_SIZE, IPC_CREAT | 0666);
     shmctl(shm_id, IPC_RMID, NULL);
 }
 
 //print informations of a client
 void print_client(Client *client)
 {
-    printf("> Client(pid = %d, start = %d, end = %d, price = %d, wait_time = %ld)\n", client->pid, client->start, client->dest, client->price, client->wait_time);
+    printf("(Client(pid = %d, start = %d, dest = %d, price = %d, wait_time = %ld))\n", client->pid, client->start, client->dest, client->price, client->wait_time);
 }
 
 //print informations written on the shared memory

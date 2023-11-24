@@ -11,6 +11,10 @@
 #define BIKE_CREATED 0x5
 #define BIKE_ASSIGNED 0xC
 
-#define WAIT_UNTIL_SCHEDULE 10
+#define WAIT_UNTIL_SCHEDULE 20
+#define SEG_SIZE 1024
+
+#define true 1
+#define false 0
 
 #endif // __DEFINES_H_INCLUDED__

@@ -6,6 +6,12 @@ void *shared_mem;
 
 int main(int argc, char const *argv[])
 {
+    if (argc < 2)
+    {
+        fprintf(stderr, "Error, you should specify the oc pid as argument\n");
+        return -1;
+    }
+
     srand(time(NULL));
 
     // Get CS's pid

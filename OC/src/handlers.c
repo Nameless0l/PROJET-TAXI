@@ -15,12 +15,11 @@ void handle_client_create(int signum, siginfo_t *info, void *context)
     if (signum == CLIENT_CREATED)
     {
         push_back(clients_deque, (pid_t)info->si_pid);
-        printf("process with pid %d has been inserted in the clients list\n", (pid_t)info->si_pid);
-        fflush(stdout);
+        write(1, "process with pid %d has been inserted in the clients list\n", 58);
         return;
     }
     else
-        fprintf(stderr, "incorrect signal sent !\n");
+        write(1, "incorrect signal sent !\n", 24);
 }
 
 
@@ -35,13 +34,12 @@ void handle_client_gone(int signum, siginfo_t* info, void* context)
 {
     if (signum == CLIENT_GONE)
     {
-        delete_block(clients_deque, (pid_t)info->si_pid);
-        printf("process with pid %d has been removed in the clients list\n", (pid_t)info->si_pid);
-        fflush(stdout);
+        // delete_block(clients_deque, (pid_t)info->si_pid);
+        write(1, "process with pid %d has been removed in the clients list\n", 57);
         return;
     }
     else
-        fprintf(stderr, "incorrect signal sent !\n");
+        write(1, "incorrect signal sent !\n", 24);
 }
 
 
@@ -57,10 +55,9 @@ void handle_bike_create(int signum, siginfo_t *info, void *context)
     if (signum == BIKE_CREATED)
     {
         push_back(bikes_deque, (pid_t)info->si_pid);
-        printf("process with pid %d has been inserted in the bikes list\n", (pid_t)info->si_pid);
-        fflush(stdout);
+        write(1, "process with pid %d has been inserted in the bikes list\n", 56);
         return;
     }
     else
-        fprintf(stderr, "incorrect signal sent !\n");
+        write(1, "incorrect signal sent !\n", 24);
 }

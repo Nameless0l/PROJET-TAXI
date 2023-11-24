@@ -27,7 +27,8 @@
 #define ENDED_COURSE 0x4
 #define WAIT_TIME 1 
 
-typedef struct{
+typedef struct Bike
+{
    pid_t pid;
    int itinerary[5];
 }Bike;

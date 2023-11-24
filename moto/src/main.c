@@ -1,3 +1,4 @@
+#include <time.h>
 #include "../include/defines.h"
 #include "../include/signal.h"
 #include "../include/initialisation_bikes.h"
@@ -8,13 +9,13 @@ int shm_id;	// id of area
 void *shm_zone;	//attach area
 key_t shm_key;	// clief of area
 
-void print_bike(Bike *bike){
-    printf("> Bike(pid = %d, It = ", bike->pid);
+void print_bike(Bike *bike)
+{
+    printf("Bike(pid = %d, Itinerary = [", bike->pid);
     
     for(int i = 0; i < RADIUS; i++)
-        printf("%d:%s ", i + 1, quartier[bike->itinerary[i]]);
-    
-    printf("\n");
+        printf("%s, ", quartier[bike->itinerary[i]]);
+    printf("]\n");
 }
 
 void print_segment(){
@@ -24,7 +25,17 @@ void print_segment(){
 }
 
 /* a variable which content things that we want to write to shm the first argument(argv[1]) content the clief of shm and the oder content the things that we want to write in the shm argc content the numbers of arguments argv must have at least 2 arguments */
-int main(int argc,char *argv[]){
+int main(int argc,char *argv[])
+{
+    if (argc < 2)
+    {
+        fprintf(stderr, "Error, you should specify the oc pid as argument\n");
+        return -1;
+    }
+    
+    // initialisation du générateur aléatoire . . .
+    srand(time(NULL));
+
     set_handler();
 
     // Create a new bike

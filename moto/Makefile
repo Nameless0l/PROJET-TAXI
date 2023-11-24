@@ -9,7 +9,7 @@ all: $(EXEC)
 $(EXEC): main.o initialisation-bikes.o signal.o
 	$(CC) -o $(EXEC) $^ $(LDFLAGS)
 
-main.o: src/main.c
+main.o: src/main.c	
 	$(CC) -c $< $(CFLAGS)
 
 initialisation-bikes.o: src/initialisation-bikes.c

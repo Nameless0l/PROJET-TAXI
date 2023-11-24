@@ -8,17 +8,22 @@
 deque *bikes_deque;
 deque *clients_deque;
 
+void my_sleep()
+{
+    for (int i = 0; i < 0xffffffff * 10; ++i);
+}
+
 int main()
 {
     init_oc();
     printf("PID of the Central Scheduler : %d\n", getpid());
-    fflush(stdout); 
+    fflush(stdout);
 
     while(1)
     {
-        sleep(WAIT_UNTIL_SCHEDULE);
+        my_sleep();
         schedule();
-    } // */
+    }
 
     end_oc();
     return 0;

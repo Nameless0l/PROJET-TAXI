@@ -16,4 +16,13 @@ void init_queues();
 void init_sig_handlers();
 
 void schedule();
+
+typedef int bool;
+
+typedef enum state
+{
+    _taken=0,
+    _free=1
+}state;
+
 #endif // __OC_H_INCLUDED__
