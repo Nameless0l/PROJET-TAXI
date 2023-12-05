@@ -109,6 +109,7 @@ void push_front(deque *deque, pid_t pid)
 void push_back(deque *deque, pid_t pid)
 {
     block *new_block = create_block(pid);
+    fprintf(stderr, "inside push with %d--\n", pid);
     if (deque->end == NULL) 
     {
         // La deque est vide
@@ -182,5 +183,37 @@ void delete_block(deque *deque, pid_t pid)
     else 
         prev->next = current->next;
 
-    // free(current);
+    if (current != NULL)
+        free(current);
+}
+
+/**
+ * @brief print all values(pids) inside the deque
+ * 
+ * @param deq deque
+ */
+void print_deque(deque *deq)
+{
+    block *cur = deq->start;
+    printf("[");
+    while (cur != NULL)
+    {
+        printf("%d, ", cur->pid);
+        cur = cur->next;
+    }
+    printf("]\n"); fflush(stdout);
+}
+
+
+int count_deque_values(deque *deq)
+{
+    int res = 0;
+    block *cur = deq->start;
+    while (cur != NULL)
+    {
+        ++res;
+        cur = cur->next;
+    }
+
+    return res;
 }

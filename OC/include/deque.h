@@ -21,6 +21,12 @@ typedef struct deque
 // block creation
 block *create_block(pid_t pid);
 
+// count deque blocks
+int count_deque_values(deque *deq);
+
+// print deque blocks
+void print_deque(deque *deq);
+
 // free block
 void free_block(block *block);
 

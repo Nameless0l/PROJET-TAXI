@@ -1,30 +1,38 @@
 #include "../include/oc.h"
-#include "../include/deque.h"
+#include "../include/list.h"
 #include "../include/defines.h"
 
-#include <unistd.h>
 #include <stdio.h>
+#include <unistd.h>
 
-deque *bikes_deque;
-deque *clients_deque;
+List *bikes_list;
+List *clients_list;
 
-void my_sleep()
+void *ui_shm;
+HeadGData *corresponding_gDatas;
+
+int main(int argc, char **argv)
 {
-    for (int i = 0; i < 0xffffffff * 10; ++i);
-}
+    if(argc < 2) 
+        return EXIT_FAILURE;
 
-int main()
-{
+    pid_t ui_pid = atoi(argv[1]);
+    
+    corresponding_gDatas = create_gData_head();
+
+    create_ui_memory();
     init_oc();
-    printf("PID of the Central Scheduler : %d\n", getpid());
+    
+    printf("Central Scheduler's PID : %d\n\n", getpid());
     fflush(stdout);
 
     while(1)
     {
         my_sleep();
-        schedule();
+        schedule(ui_pid);
     }
 
-    end_oc();
+    end_oc(ui_pid);
+
     return 0;
 }

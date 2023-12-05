@@ -11,11 +11,12 @@ key_t shm_key;	// clief of area
 
 void print_bike(Bike *bike)
 {
-    printf("Bike(pid = %d, Itinerary = [", bike->pid);
+    printf("> Bike(pid=%d, Itinerary=[", bike->pid);
     
     for(int i = 0; i < RADIUS; i++)
         printf("%s, ", quartier[bike->itinerary[i]]);
-    printf("]\n");
+
+    printf("\b\b])\n");
 }
 
 void print_segment(){
@@ -49,9 +50,6 @@ int main(int argc,char *argv[])
 
     // Write bike's infos in the shared segment
     write_infos_bike(bike);
-
-    // Test
-    print_segment();
 
     // Get the central scheduler pid
     oc_pid = atoi(argv[1]);
