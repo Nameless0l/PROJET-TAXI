@@ -173,7 +173,7 @@ void write_structures_in_ui_shm(HeadGData *corresponding_gDatas, pid_t ui_pid){
         ((int*)ui_shm)[1] = corresponding_gDatas->n;
         ((int*)ui_shm)[0] = 1;
 
-        //kill(ui_pid, UI_SIGNAL);
+        kill(ui_pid, UI_SIGNAL);
         clear_gDatas(corresponding_gDatas);
     }
 }
