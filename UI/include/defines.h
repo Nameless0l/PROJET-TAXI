@@ -18,7 +18,7 @@
 #define BIKE_G 0.84
 #define BIKE_B 0.34
 
-#define SPEED 1
+#define SPEED 0.5
 
 #define true 1
 #define false 0

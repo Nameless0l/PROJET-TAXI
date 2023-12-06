@@ -1,6 +1,7 @@
 #include "../include/ui.h"
 #include "../include/defines.h"
 
+#include <stdio.h>
 #include <signal.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>

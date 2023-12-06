@@ -7,6 +7,7 @@
 #include "../include/ui.h"
 #include "../include/list.h"
 #include "../include/draws.h"
+#include "../include/handler.h"
 #include "../include/defines.h"
 
 list_t *bikes_n_clients_list;
