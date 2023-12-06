@@ -1,7 +1,7 @@
 #ifndef __DEFINES_H_INCLUDED__
 #define __DEFINES_H_INCLUDED__
 
-#include "deque.h"
+#include "list.h"
 
 #define CLIENT_GONE 0x2
 #define CLIENT_CREATED 0x1
@@ -13,6 +13,10 @@
 
 #define WAIT_UNTIL_SCHEDULE 20
 #define SEG_SIZE 1024
+#define BUF_SIZE 255
+#define UI_SEG_SIZE 2048
+
+#define UI_SIGNAL 0xE
 
 #define true 1
 #define false 0

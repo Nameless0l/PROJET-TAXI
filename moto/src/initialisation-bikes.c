@@ -130,10 +130,13 @@ Bike *create_bike()
 
     // Generating a itinerary filled with a random of 5 consecutives quarters
     int start = random_integer(0, NB_QUARTER - RADIUS);
-    
+
     // Filling consecutives quarters
     for (int i = 0; i < RADIUS; i++)
         bike->itinerary[i] = start++;
+    
+    // Bike position
+    bike->start = bike->itinerary[random_integer(start, start + RADIUS - 1)];
 
     // Filling the new bike structure
     bike->pid = getpid(); // Getting pid process
@@ -152,26 +155,3 @@ void create_segment(pid_t pid)
     shm_id = shmget((key_t)pid, SEG_SIZE, IPC_CREAT | 0666);
     shm_zone = shmat(shm_id, NULL, 0);
 }
-
-    /*for (int i = 0; i < RADIUS; i++)
-    {
-        printf("%d\n", itinerary[i]);
-        printf("%s\n", quartier[itinerary[i]]);
-        
-    }*/
-    
-    //struct_data* point = &data;
-    //printf("%x\n",&data);
-    //printf("%x\n",&point);
-    //printf("%d\n",sd.pid); 
-    //memcpy(point,shm_mem,sizeof(struct_data));
-    //printf("%d\n",pid);
-    //printf("%d\n", data.pid);
-    //printf("%d\n", point->pid);
-
-
-//This fonction will be use to create the signal to tell th OC that we finished 
-    //the creation of the bike . . . 
-    //The handler of this will be create by the C.O
-    //kill(getppid(),SIGUSR1);
-    //After we are going to use signal(SIGUSR1,handle)

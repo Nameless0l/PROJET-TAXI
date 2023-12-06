@@ -1,36 +1,33 @@
+### __MAKEFILE___ ###
+
 CC=gcc
 CFLAGS=-m64 -lGL -lGLU -lglut -lm
-LDFLAGS=-m64 -lGL -lGLU -lglut
-CFLAGS = 
-LDFLAGS = 
+LDFLAGS=-m64 -lGL -lGLU -lglut -lm
 
 EXEC=./bin/oc.out
 
 all: $(EXEC)
 
-$(EXEC): main.o oc.o handlers.o list.o gData_list.o
+$(EXEC): main.o draws.o list.o ui.o handler.o
 	$(CC) -o $(EXEC) $^ $(LDFLAGS)
 
 main.o: src/main.c
 	$(CC) -c $< $(CFLAGS)
 
-oc.o: src/oc.c
-	$(CC) -c $< $(CFLAGS)
-
-handlers.o: src/handlers.c
+draws.o: src/draws.c
 	$(CC) -c $< $(CFLAGS)
 
 list.o: src/list.c
 	$(CC) -c $< $(CFLAGS)
 
-gData_list.o: src/gData_list.c
+ui.o: src/ui.c
 	$(CC) -c $< $(CFLAGS)
 
+handler.o: src/handler.c
+	$(CC) -c $< $(CFLAG)
+	
 clean:
-	rm *.o
-
-mrproper:
-	rm -f $(EXEC)
+	rm -f *.o
 
 launch:
 	$(EXEC)

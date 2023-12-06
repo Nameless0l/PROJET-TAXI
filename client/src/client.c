@@ -29,14 +29,11 @@ void client_handler(int sig)
     switch (sig)
     {
     case BIKE_ASSIGNED:
-        printf("1");
         break;
     case STARTED_COURSE:
-        printf("2");
         client_wait(0);
         break;
     case ENDED_COURSE:
-        printf("3");
         break;
     default:
         break;
@@ -53,8 +50,8 @@ Client *generate_client()
         return NULL;
 
     // Filling client's parameters
-    new_client->start = (quarter)random_integer(0, NB_QUARTER);
-    new_client->dest = (quarter)random_integer(0, NB_QUARTER); // This modulo is used to be sure that the integer which will show the des in enumeration is not aut of range
+    new_client->start = (Quarter)random_integer(0, NB_QUARTER);
+    new_client->dest = (Quarter)random_integer(0, NB_QUARTER); // This modulo is used to be sure that the integer which will show the des in enumeration is not aut of range
     new_client->wait_time = random_integer(MIN_WAIT_TIME, MAX_WAIT_TIME + 1);
     new_client->pid = getpid();
 
@@ -103,7 +100,7 @@ void free_shm(pid_t client_pid)
 //print informations of a client
 void print_client(Client *client)
 {
-    printf("(Client(pid = %d, start = %d, dest = %d, price = %d, wait_time = %ld))\n", client->pid, client->start, client->dest, client->price, client->wait_time);
+    printf("> Client(pid=%d, start=%d, dest=%d, price=%d, wait_time=%ld)\n", client->pid, client->start, client->dest, client->price, client->wait_time);
 }
 
 //print informations written on the shared memory

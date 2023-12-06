@@ -9,12 +9,11 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 
-
 #include "defines.h"
-
 
 void handle_client_create(int signum, siginfo_t *info, void *context);
 void handle_bike_create(int signum, siginfo_t *info, void *context);
 void handle_client_gone(int signum, siginfo_t *info, void *context);
+void init_sig_handlers();
 
 #endif // __HANDLERS_H_INCLUDED__

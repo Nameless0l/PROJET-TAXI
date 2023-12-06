@@ -1,65 +1,223 @@
+#include <errno.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
 
 #include "../include/oc.h"
-#include "../include/deque.h"
+#include "../include/list.h"
 #include "../include/shared.h"
 #include "../include/defines.h"
 #include "../include/handlers.h"
+#include "../include/gData_list.h"
 
-/**
- * @brief init clients deque and bikes deque
- *
- */
-void init_deques()
-{
-    bikes_deque = create_deque();
-    clients_deque = create_deque();
-    return;
+void oc_log(List *bikes_list, List *clients_list){
+    system("clear");
+
+    int n_bikes = count_list_values(bikes_list);
+    int n_clients = count_list_values(clients_list);
+    int n_max = n_bikes > n_clients ? n_bikes : n_clients;
+
+    Block *cur_bike = bikes_list->start;
+    Block *cur_client = clients_list->start;
+
+    printf("\n\nSCHEDULING LOG...\n");
+    printf("%10s | %10s\n", "Bikes", "Clients");
+
+    for(int i = 0; i < n_max; i++){
+        if(cur_bike){
+            printf("%10d |", cur_bike->pid);
+            cur_bike = cur_bike->next;
+        }else{
+            printf("%10s |", "");
+        }
+
+        if(cur_client){
+            printf("%10d |", cur_client->pid);
+            cur_client = cur_client->next;
+        }else{
+            printf("%10s |", "");
+        }
+
+        printf("\n");
+    }
+
+    printf("\n");
+    fflush(stdout);
 }
 
+/**ù
+ * @brief run the scheduler
+ */
+void schedule(pid_t ui_pid)
+{
+    // Blocking clients create, bikes create and clients gone signal
+    struct sigaction new_sigaction;
+    sigset_t new_sig_set;
+
+    set_blocking_signals(&new_sig_set);
+
+    oc_log(bikes_list, clients_list);
+
+    // Will contain clients and lists that has been assigned
+    List* assigned_bikes = create_list();
+    List* assigned_clients = create_list();
+
+    int bikes_count = count_list_values(bikes_list);
+    bool* bikes_states = (bool*)malloc(sizeof(bool) * bikes_count);
+    for(int i = 0; i < bikes_count; ++i)
+        bikes_states[i] = _free;
+
+    /* for each client, search for the first **free** bike that itinerary matches  */
+    Block* current_client = clients_list->start;
+
+    while(current_client != NULL)
+    {
+        // Access client segment and get info. if it doesn't exists, delete client in clients_list
+        if (!check_shm_exist(current_client->pid))
+        {
+            Block* client_gone = current_client;
+            current_client = current_client->next;
+            delete_block(clients_list, client_gone->pid);
+            
+            continue;
+        }
+        
+        Client* client_infos = (Client*)get_shm(current_client->pid);
+
+        // Iterating over bikes
+        bool bike_found = false;
+        int bikes_states_iter = 0;
+        
+        Block* current_bike = bikes_list->start;
+
+        while (current_bike)
+        {
+            if (bikes_states[bikes_states_iter] == _taken) // Bike already taken, pass
+            {
+                ++bikes_states_iter;
+                current_bike = current_bike->next;
+                
+                continue;
+            }
+
+            // acess bike segment info. if it doesn't exists, delete bike form bikes_list
+            if (!check_shm_exist(current_bike->pid))
+            {
+                Block* bike_to_delete = current_bike;
+                current_bike = current_client->next;
+                delete_block(bikes_list, bike_to_delete->pid);
+
+                continue;
+            }
+
+            Bike *bike_infos = (Bike*)get_shm(current_bike->pid);
+
+            // Search for the client destination in the bike intinerary
+            if(bike_founded(bike_infos, client_infos)){
+                pid_t bike_pid = current_bike->pid;
+                pid_t client_pid = current_client->pid;
+
+                bike_found = true;
+                printf("\t> Corresponding Found (Bike(pid=%d), Client(pid=%d))\n", bike_pid, client_pid);
+
+                appendGData(corresponding_gDatas, bike_pid, bike_infos->start, client_pid, client_infos->start, client_infos->dest);
+
+                // adding to assigned bikes and clients
+                push_back(assigned_bikes, bike_pid);
+                push_back(assigned_clients, client_pid);
+
+                // sending signals to client and bike
+                kill(client_pid, BIKE_ASSIGNED);
+                kill(bike_pid, CLIENT_ASSIGNED);
+
+                // marking actual bike as free
+                bikes_states[bikes_states_iter] = _taken;
+                break;
+            }
+
+            current_bike = current_bike->next;
+            ++bikes_states_iter;
+        }
+
+        current_client = current_client->next;
+    }
+
+    write_structures_in_ui_shm(corresponding_gDatas, ui_pid);
+
+    delete_assigned(bikes_list, assigned_bikes);
+    delete_assigned(clients_list, assigned_clients);
+    destroy_list(assigned_bikes);
+    destroy_list(assigned_clients);
+
+    free(bikes_states);
+
+    // unblock signals
+    sigprocmask(SIG_UNBLOCK, &new_sig_set, NULL);
+}
+
+void write_structures_in_ui_shm(HeadGData *corresponding_gDatas, pid_t ui_pid){
+    int can_write = ((int*)ui_shm)[0] == 0;
+
+    if (can_write){
+        void *ui_shm_ptr = ui_shm + 2 * sizeof(int);
+
+        // Writing graphic data structures
+        GData *cur_data = corresponding_gDatas->first;
+
+        while(cur_data){
+            memcpy(ui_shm_ptr, cur_data, sizeof(GData));
+
+            ui_shm_ptr += sizeof(GData);
+            cur_data = cur_data->next;
+        }
+
+        ((int*)ui_shm)[1] = corresponding_gDatas->n;
+        ((int*)ui_shm)[0] = 1;
+
+        //kill(ui_pid, UI_SIGNAL);
+        clear_gDatas(corresponding_gDatas);
+    }
+}
+
+// deleting assigned clients and bikes from lists
+void delete_assigned(List *list, List *assigned)
+{
+    Block* to_delete = assigned->start;
+    
+    while(to_delete)
+    {
+        delete_block(list, to_delete->pid);
+        to_delete = to_delete->next;
+    }
+}
 
 /**
- * @brief init signals handlers for catched signal by OC
- *
+ * @brief init clients list and bikes list
  */
-void init_sig_handlers()
+void my_sleep()
 {
-    // client created
-    struct sigaction client_sig;
-    client_sig.sa_sigaction = handle_client_create;
-    client_sig.sa_flags = SA_SIGINFO;
+    for (int i = 0; i < 0xffffffff; ++i);
+}
 
-    sigemptyset(&client_sig.sa_mask);
-    sigaction(CLIENT_CREATED, &client_sig, NULL);
+void init_lists()
+{
+    bikes_list = create_list();
+    clients_list = create_list();
 
-    // bike created
-    struct sigaction bike_sig;
-    bike_sig.sa_sigaction = handle_bike_create;
-    bike_sig.sa_flags = SA_SIGINFO;
-    
-    sigemptyset(&bike_sig.sa_mask);
-    sigaction(BIKE_CREATED, &bike_sig, NULL);
-
-    // client gone
-    struct sigaction client_gone_sig;
-    client_gone_sig.sa_sigaction = handle_client_gone;
-    client_gone_sig.sa_flags = SA_SIGINFO;
-    
-    sigemptyset(&client_gone_sig.sa_mask);
-    sigaction(CLIENT_GONE, &client_gone_sig, NULL);
-    //*/
+    return;
 }
 
 void init_oc()
 {
-    printf("==========Starting Central Scheduling===========\n\n");
-    printf("Initialising deque . . . ");
-    init_deques();
-    printf("ok \n");
-    printf("Initialising signals handlers . . . ");
+    printf("========== STARTING CENTRAL SCHEDULING ===========\n\n");
+    
+    printf("> Initialising list... ");
+    init_lists();
+    printf("OK\n");
+    
+    printf("> Initialising signals handlers... ");
     init_sig_handlers();
-    printf("ok \n\n");
+    printf("OK\n\n");
+    
     return;
 }
 
@@ -67,18 +225,85 @@ void init_oc()
  * @brief proper when killing oc
  *
  */
-void end_oc()
+void end_oc(pid_t ui_pid)
 {
-    if (bikes_deque != NULL)
-        destroy_deque(bikes_deque);
+    if (bikes_list != NULL)
+        destroy_list(bikes_list);
     
-    if (clients_deque != NULL)
-        destroy_deque(clients_deque);
+    if (clients_list != NULL)
+        destroy_list(clients_list);
+
+    int shmid = shmget((key_t)ui_pid, UI_SEG_SIZE, IPC_CREAT | IPC_EXCL);
+    shmctl(shmid, IPC_RMID, NULL);
+}
+
+
+/**
+ * @brief check if a shared memory segment exist
+ * 
+ * @param pid the key of the segment
+ * @return true if the segment exist
+ * @return false otherwise
+ */
+bool check_shm_exist(pid_t pid)
+{
+    errno = 0;
+    int shmid = 0;
+    key_t shared_key = pid;
+    if ((shmid = shmget(shared_key, SEG_SIZE, IPC_CREAT | IPC_EXCL)) == -1)
+    {
+        if (errno == EEXIST) // segment exist
+            return true;
+        else
+            return false;
+    }
+
+    shmctl(shmid, IPC_RMID, NULL);
+    return false;
+}
+
+// Create shared memory
+void create_ui_memory()
+{
+    // create shared memory for client
+    int shm_id = shmget((key_t)getpid(), UI_SEG_SIZE, IPC_CREAT | 0666);
+    if (shm_id == -1)
+    {
+        perror("Failed to create a shared memory");
+        exit(EXIT_FAILURE);
+    }
+
+    // Attach physical memory to virtual shared memory
+    ui_shm = shmat(shm_id, NULL, 0);
+    if (ui_shm == (void *)-1)
+    {
+        perror("Failed to attach a physic memory to the virtual chared memory created among"); // print error message if it failed
+        exit(EXIT_FAILURE);
+    }
+
+    ((int*)ui_shm)[0] = 0;
+}
+
+void set_blocking_signals(sigset_t *new_sig_set)
+{
+    // Setting blocking signals
+    sigemptyset(new_sig_set);
+    sigaddset(new_sig_set, CLIENT_CREATED);
+    sigaddset(new_sig_set, CLIENT_GONE);
+    sigaddset(new_sig_set, BIKE_CREATED);
+
+    // blocking
+    sigprocmask(SIG_BLOCK, new_sig_set, NULL);
+}
+
+bool bike_founded(Bike *bike, Client *client){
+    for(int i = 0; i < RADIUS; ++i)
+        if(bike->itinerary[i] == client->dest)
+            return true;
 }
 
 /**
  * @brief get shared memory created by client or bike process
- *
  * @param pid(pid_t) pid
  * @return void*
  */
@@ -92,135 +317,4 @@ void *get_shm(pid_t pid)
         fprintf(stderr, "cannot acess shared memory\n");
     else
         return ret;
-}
-
-/**
- * @brief run the scheduler
- *
- */
-void schedule()
-{
-    printf("\nStarting scheduling routine . . .\n");
-    printf("temporary masking creation signals reception . . .\n\n");
-    fflush(stdout);
-
-
-    // blocking clients create, bikes create and clients gone signal
-    struct sigaction new_sigaction;
-    sigset_t new_sig_set;
-
-    // setting blocking signals
-    sigemptyset(&new_sig_set);
-    sigaddset(&new_sig_set, CLIENT_CREATED);
-    sigaddset(&new_sig_set, CLIENT_GONE);
-    sigaddset(&new_sig_set, BIKE_CREATED);
-
-    // blocking
-    sigprocmask(SIG_BLOCK, &new_sig_set, NULL);
-
-    printf("scheduling . . .\n");
-    /* Starting scheduling */
-
-    printf("All bikes in deque : [");
-    block* currentt_bike = bikes_deque->start;
-    while(currentt_bike != NULL)
-    {
-        printf("%d,", currentt_bike->pid);
-        currentt_bike = currentt_bike->next;
-    }
-    printf("]\n"); fflush(stdout); //*/
-
-    printf("All clients in the deque : [");
-    fflush(stdout);
-    block* currentt_client = clients_deque->start;
-    while(currentt_client != NULL)
-    {
-        printf("%d,", currentt_client->pid);
-        currentt_client = currentt_client->next;
-    }
-    printf("]\n"); fflush(stdout);
-
-
-    deque *deque_bikes_states = create_deque();
-    block* currenttt_bike = bikes_deque->start;
-    while(currenttt_bike != NULL)
-    {
-        push_back(deque_bikes_states, _free);
-        currenttt_bike = currenttt_bike->next;
-    }
-
-    deque* bikes_to_delete = create_deque();
-    deque* clients_to_delete = create_deque();
-    block* current_client = clients_deque->start;
-
-    while(current_client != NULL)
-    {
-        bool bike_found = false;
-        Client *client_infos = (Client *)get_shm(current_client->pid);;
-
-        block *current_bike = bikes_deque->start;
-        block *current_bike_state = deque_bikes_states->start;
-        while(current_bike != NULL && current_bike_state != NULL)
-        {
-            if (current_bike_state->pid == _taken)
-                continue;
-
-            Bike *bike_infos = (Bike*)get_shm(current_bike->pid);
-            for (int i = 0; i < RADIUS; ++i)
-            {
-                if (bike_infos->itinerary[i] == client_infos->dest)
-                {
-                    bike_found = true;
-                    break;
-                }
-            }
-
-            if (bike_found)
-            {
-                pid_t* p1 = (pid_t*)bike_infos;
-                *p1 = current_client->pid;
-
-                pid_t* p2 = (pid_t*)client_infos;
-                *p2 = current_bike->pid;
-
-                push_back(bikes_to_delete, current_client->pid);
-                push_back(clients_to_delete, current_client->pid);
-
-                kill(current_client->pid, BIKE_ASSIGNED);
-                kill(current_bike->pid, CLIENT_ASSIGNED);
-
-                current_bike_state->pid = _taken;
-                break;
-            }
-
-            current_bike = current_bike->next;
-            current_bike_state = current_bike_state->next;
-        }
-
-        current_client = current_client->next;
-    }
-
-    block* bike_to_delete = bikes_to_delete->start;
-    while(bike_to_delete != NULL)
-    {
-        delete_block(bikes_deque, bike_to_delete->pid);
-        bike_to_delete = bike_to_delete->next;
-    }
-
-    block* client_to_delete = clients_to_delete->start;
-    while(client_to_delete != NULL)
-    {
-        delete_block(clients_deque, client_to_delete->pid);
-        client_to_delete = client_to_delete->next;
-    }
-
-    printf("End of scheduling . . .\n");
-    printf("unmasking signals sent inside scheduling. . .\n");
-    fflush(stdout);
-
-    // unblock signals
-    sigprocmask(SIG_UNBLOCK, &new_sig_set, NULL);
-    // */
-    printf("End of scheduling routine\n");
-    fflush(stdout);
 }
