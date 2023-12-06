@@ -142,7 +142,7 @@ typedef enum QUARTER_YAOUNDE
     QUARTIER_GENERAL,
     ECOLE_NORMALE,
     NKOA_BANG
-} quarter;
+}Quarter;
 
 typedef struct client
 {
@@ -156,8 +156,8 @@ typedef struct client
         price in an integer which represents the price that client will pay if there is a bic that drive him to his dest
     */
     pid_t pid;
-    quarter start;
-    quarter dest;
+    Quarter start;
+    Quarter dest;
     unsigned int price;
     time_t wait_time;
 } Client;

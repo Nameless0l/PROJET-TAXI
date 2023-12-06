@@ -9,8 +9,7 @@
 #include "../include/handlers.h"
 #include "../include/gData_list.h"
 
-void oc_log(List *bikes_list, List *clients_list)
-{
+void oc_log(List *bikes_list, List *clients_list){
     system("clear");
 
     int n_bikes = count_list_values(bikes_list);
@@ -155,8 +154,7 @@ void schedule(pid_t ui_pid)
     sigprocmask(SIG_UNBLOCK, &new_sig_set, NULL);
 }
 
-void write_structures_in_ui_shm(HeadGData *corresponding_gDatas, pid_t ui_pid)
-{
+void write_structures_in_ui_shm(HeadGData *corresponding_gDatas, pid_t ui_pid){
     int can_write = ((int*)ui_shm)[0] == 0;
 
     if (can_write){
@@ -175,7 +173,7 @@ void write_structures_in_ui_shm(HeadGData *corresponding_gDatas, pid_t ui_pid)
         ((int*)ui_shm)[1] = corresponding_gDatas->n;
         ((int*)ui_shm)[0] = 1;
 
-        kill(ui_pid, UI_SIGNAL);
+        //kill(ui_pid, UI_SIGNAL);
         clear_gDatas(corresponding_gDatas);
     }
 }
@@ -298,8 +296,7 @@ void set_blocking_signals(sigset_t *new_sig_set)
     sigprocmask(SIG_BLOCK, new_sig_set, NULL);
 }
 
-bool bike_founded(Bike *bike, Client *client)
-{
+bool bike_founded(Bike *bike, Client *client){
     for(int i = 0; i < RADIUS; ++i)
         if(bike->itinerary[i] == client->dest)
             return true;

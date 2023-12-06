@@ -30,8 +30,7 @@ void destroy_list(List *list)
 {
     Block *cur_block = list->start;
 
-    while(cur_block != NULL)
-    {
+    while(cur_block){
         Block *block_to_delete = cur_block;
         cur_block = cur_block->next;
         free(block_to_delete);
@@ -123,7 +122,7 @@ pid_t pop_front(List *list)
     Block *front_block = list->start;
     pid_t pid = front_block->pid;
 
-    list->start = list->start->next;
+    list->start == list->start->next;
 
     free_block(front_block);
 
@@ -158,7 +157,6 @@ void delete_block(List *list, pid_t pid)
     free(cur_block);
 }
 
-
 /**
  * @brief print all values(pids) inside the list
  * 
@@ -184,8 +182,7 @@ void print_list(char *s, List *list)
     fflush(stdout);
 }
 
-void print_lists(List *bikes_list, List *clients_list)
-{
+void print_lists(List *bikes_list, List *clients_list){
     print_list("Bikes list", bikes_list);
     print_list("Clients list", clients_list);
 }
@@ -193,8 +190,7 @@ void print_lists(List *bikes_list, List *clients_list)
 int count_list_values(List *list)
 {
     int n = 0;
-    for(Block *cur_block = list->start; cur_block != NULL; cur_block = cur_block->next) 
-        ++n;
+    for(Block *cur_block = list->start; cur_block; cur_block = cur_block->next) ++n;
 
     return n;
 }

@@ -23,7 +23,6 @@ int main(int argc, char const *argv[])
     // Create a new client
     Client *client = generate_client();
 
-    printf("CLIENT INFOS\t");
     print_client(client);
 
     // Create shared memory
@@ -31,9 +30,6 @@ int main(int argc, char const *argv[])
 
     // Write client's infos in the shared memory
     write_client_infos(client);
-
-    printf("SHM CONTENT\t");
-    print_client_segment();
 
     client_wait(CLIENT_WAIT_TIME);
 

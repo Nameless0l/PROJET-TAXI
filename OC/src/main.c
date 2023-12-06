@@ -13,10 +13,9 @@ HeadGData *corresponding_gDatas;
 
 int main(int argc, char **argv)
 {
-    if(argc < 2) 
-        return EXIT_FAILURE;
+    //if(argc < 2) return EXIT_FAILURE;
 
-    pid_t ui_pid = atoi(argv[1]);
+    pid_t ui_pid;// = atoi(argv[1]);
     
     corresponding_gDatas = create_gData_head();
 
