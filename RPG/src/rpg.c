@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
             }
             else
             {
-                char* args[] = {"../../moto/bin/bike.out", argv[1], NULL};
+                char* args[] = {"../../bike/bin/bike.out", argv[1], NULL};
                 execvp("../../moto/bin/bike.out", args);
             }
         }
