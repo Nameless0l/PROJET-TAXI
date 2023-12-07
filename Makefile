@@ -1,8 +1,5 @@
 
 make:
-# compiling launcher
-	gcc ./launcher.c -o launcher.out
-
 # compiling modules
 	cd ./OC && make 
 	cd ./moto && make
@@ -10,11 +7,19 @@ make:
 	cd ./RPG && make 
 
 clean:
-	rm ./launcher.out
 	cd ./OC && make clean
 	cd ./moto && make clean
 	cd ./client && make clean
 	cd ./RPG && make clean
+
+clean_ui:
+	cd ./UI && make clean
+
+build_ui:
+	cd ./UI && make 
+
+launch_ui:
+	cd ./UI && make launch 
 
 launch_oc:
 	cd ./OC && make launch 

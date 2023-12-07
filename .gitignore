@@ -1,5 +1,2 @@
-./OC/*.o
-./UI/*.o
-./RPG/*.o
-./moto/*.o
-./client/*.o
+*/*.o
+*/*/*.out
