@@ -31,3 +31,6 @@ quarters.o: src/quarters.c
 
 clean:
 	rm -f *.o
+
+launch:
+	$(EXEC)
