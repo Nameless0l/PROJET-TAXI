@@ -1,23 +1,33 @@
+### __MAKEFILE___ ###
 
-make:
-# compiling launcher
-	gcc ./launcher.c -o launcher.out
+CC=gcc
+CFLAGS=-m64 -lGL -lGLU -lglut -lm
+LDFLAGS=-m64 -lGL -lGLU -lglut -lm
 
-# compiling modules
-	cd ./OC && make 
-	cd ./moto && make
-	cd ./client && make
-	cd ./RPG && make 
+EXEC=./bin/ui.out
+
+all: $(EXEC)
+
+$(EXEC): main.o draws.o list.o ui.o handler.o quarters.o
+	$(CC) -o $(EXEC) $^ $(LDFLAGS)
+
+main.o: src/main.c
+	$(CC) -c $< $(CFLAGS)
+
+draws.o: src/draws.c
+	$(CC) -c $< $(CFLAGS)
+
+list.o: src/list.c
+	$(CC) -c $< $(CFLAGS)
+
+ui.o: src/ui.c
+	$(CC) -c $< $(CFLAGS)
+
+handler.o: src/handler.c
+	$(CC) -c $< $(CFLAG)
+	
+quarters.o: src/quarters.c
+	$(CC) -c $< $(CFLAG)
 
 clean:
-	rm ./launcher.out
-	cd ./OC && make clean
-	cd ./moto && make clean
-	cd ./client && make clean
-	cd ./RPG && make clean
-
-launch_oc:
-	cd ./OC && make launch 
-
-launch:
-	cd ./RPG && make launch $(ARGS)
+	rm -f *.o
