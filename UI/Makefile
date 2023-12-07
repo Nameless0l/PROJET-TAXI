@@ -1,14 +1,14 @@
 ### __MAKEFILE___ ###
 
 CC=gcc
-CFLAGS=-m64 -lGL -lGLU -lglut -lm
-LDFLAGS=-m64 -lGL -lGLU -lglut -lm
+CFLAGS=-m64 -lGL -lGLU -lglut -lm -g
+LDFLAGS=-m64 -lGL -lGLU -lglut -lm -g
 
-EXEC=./bin/oc.out
+EXEC=./bin/ui.out
 
 all: $(EXEC)
 
-$(EXEC): main.o draws.o list.o ui.o handler.o
+$(EXEC): main.o draws.o list.o ui.o handler.o quarters.o
 	$(CC) -o $(EXEC) $^ $(LDFLAGS)
 
 main.o: src/main.c
@@ -26,6 +26,9 @@ ui.o: src/ui.c
 handler.o: src/handler.c
 	$(CC) -c $< $(CFLAG)
 	
+quarters.o: src/quarters.c
+	$(CC) -c $< $(CFLAG)
+
 clean:
 	rm -f *.o
 
