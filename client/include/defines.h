@@ -22,7 +22,7 @@
 #define STARTED_COURSE 0x3
 #define ENDED_COURSE 0x4
 #define TO_MYSELF 0x10
-#define NB_QUARTER 113
+#define NB_QUARTER 110
 #define SEG_SIZE 1024
 #define TASK_TIME 1
 #define CLIENT_WAIT_TIME 30
@@ -146,15 +146,6 @@ typedef enum QUARTER_YAOUNDE
 
 typedef struct client
 {
-    /*
-        Definition of a client type, which will references our process: one client is a process
-
-        pid is the process id of the client (as we said, it's a process)
-
-        start and dest are quarters, element of an enumeration of all quarters of our town
-
-        price in an integer which represents the price that client will pay if there is a bic that drive him to his dest
-    */
     pid_t pid;
     Quarter start;
     Quarter dest;

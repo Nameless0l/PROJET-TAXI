@@ -9,13 +9,6 @@
 /**
  * @brief create a new block in a list data structure.
  * 
-
- * @return block* a pointer to the newly block created
- */
-
-/**
- * @brief create a new block in a list data structure.
- * 
  * @param bike_pid(pid_t) bike pid
  * @param client_pid(pid_t) client_pid
  * @param b(G_bike*) graphic bike struct
@@ -80,13 +73,6 @@ void destroy_list(list_t *list)
     free(list);
 }
 
-
-/**
- * @brief pushes a new data value onto the front of the deque by allocating a new block
- * 
- * @param deque(deque) input deque
- * @param pid(pid_t) the pid to insert
- */
 
 /**
  * @brief create a new block from parmaeters and insert it at top of the list

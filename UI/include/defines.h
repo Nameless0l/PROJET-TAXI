@@ -18,12 +18,13 @@
 #define BIKE_G 0.84
 #define BIKE_B 0.34
 
-#define SPEED 0.5
+#define SPEED 1
 
 #define true 1
 #define false 0
 
-#define NB_QUATERS 110
+#define NB_QUARTERS 110
+#define GEN_POINTS_FACTOR 1
 
 #define OC_SHM_SIZE 2048
 #define OC_HAS_SCHEDULED 0xE
