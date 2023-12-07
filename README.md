@@ -1,16 +1,18 @@
 # BIKE PROJECT
 
-An academic Project
+The Taxi project is an operating system project that aims to develop a customer transportation algorithm by motorcycle taxis. The algorithm must respect a certain policy for selecting customers to transport, as well as the order of priority of requests. The algorithm must also be capable of optimizing the use of available resources, while simulating the natural operation of a motorcycle in reality. The operation of a motorcycle in reality includes the behavior and characteristics of a real motorcycle, such as: looking for a customer when the motorcycle is empty, going to a given destination when the motorcycle has a customer, etc.
+
+The Taxi project falls within the domain of transportation, particularly for motorcycle taxi providers. It is indeed about guaranteeing customer satisfaction by offering them fast and reliable transportation. However, customer transportation poses a challenge, as it requires effectively managing a multitude of parameters, such as customer location, motorcycle availability, and delivery times.
 
 ## Features
 
-* Modern **CMake** configuration and project, which, to the best of my
-knowledge, uses the best practices,
+The Taxi project is divided into four main modules, which are:
 
-* An example of a **Clang-Format** config, inspired from the base *Google* model,
-with minor tweaks. This is aimed only as a starting point, as coding style
-is a subjective matter, everyone is free to either delete it (for the *LLVM*
-default) or supply their own alternative,
+- **The Random Process Generator (RPG)**: This is a tool that simulates the behavior of customers and motorcycles in a real environment. It generates transport requests for motorcycles and customers at random intervals, reproducing the unpredictable patterns of human behavior.
+- **The client module**: This is the module that represents the customers who request transportation. It generates customer information, such as their starting point, destination, price, and waiting time. It creates a shared memory segment, in which it writes its information. It sends a signal to the central scheduler (CS) to indicate that it has completed the initial part of the execution. It waits for a signal from the CS, which continues until it reaches its limit. If the allotted time is exceeded, the process is terminated, it sends a signal to the CS, and it is removed from the list of clients. It receives a signal from the motorcycle that informs it that it has been picked up. At the end of the trip, it receives a signal from the motorcycle indicating the end of the trip, and it terminates.
+- **The motorcycle module**: This is the module that represents the motorcycles that provide transportation to customers. It generates the motorcycle's route, which is an array of neighborhoods, elements of an enumeration of all the neighborhoods in the city. It creates a shared memory segment, in which it writes its route. It sends a signal to the CS to indicate that it has completed the initial part of the execution. It waits for a signal from the CS, which reads the list of clients stored in the shared memory segment and selects the first client on the list, according to the FIFO policy. It receives a signal from the CS that assigns it a client to serve. It sends a signal to the client to inform it that it has been picked up. It sends a signal to the CS to indicate the transport of a client. It sends a signal to the client to indicate the end of the trip. It restarts the process from the beginning.
+- **The central scheduler (CS)**: This is the module that coordinates communication between motorcycles and customers. It initializes two lists, one for clients and one for motorcycles. It listens to the various signals from motorcycles and clients for a given time. After this time, it masks the signals sent from now on for subsequent operations. It saves the various clients in the list using the FIFO policy, and it does the same for the various motorcycles. It assigns clients to available motorcycles, using the first-come, first-served protocol. It sends a signal to the chosen motorcycle and removes the chosen client from the list of clients. It restarts the process from the listening period and adds the masked elements to the appropriate lists.
+
 
 
 ## Getting Started
@@ -71,40 +73,31 @@ You have to follow the following steps:
 * **Clean the previous commpilation**:
 ```bash
 make clean 
-make clean_ui
 ``` 
 
 * **Compile the project**:
 ```bash
 make
-make build_ui
 ```
 
 * **Launch the UI**: Launch the UI and copy it **PID** displayed on the terminal. Also copy the pid of the OC after launching it
 ```bash
-make launch_ui
+./UI/bin/ui.out <ui_pid>
 ```
 
 Open another terminal another terminal to launch the OC
 
 * **Launch the OC**:
 ```bash
-cd ./OC
-./bin/oc.out <ui_pid>
+./OC/bin/oc.out <ui_pid>
 ```
 
 After launching the OC, you have to get it PID that will be logged in the terminal and then launch the RPG with it as args
 
 * **Launch the RPG**:Open another terminal at the root of the project and type these command
 ```bash
-cd ./RPG
-./bin/rpg.out <oc_pid>
+./RPG/bin/rpg.out <oc_pid>
 ```
-
-### End to end tests
-
-
-
 
 
 ## Authors
@@ -116,7 +109,7 @@ cd ./RPG
 * **Jordan Vuide** - [@PacomeKFP](https://github.com/PacomeKFP)
 * **Nina Laissa Ntye** - [@PacomeKFP](https://github.com/PacomeKFP)
 * **Anne Rosalie Ngo Bassom** - [@PacomeKFP](https://github.com/PacomeKFP)
-* **Gabriel Nassaire** - [@PacomeKFP](https://github.com/PacomeKFP)
+* **Gabriel Nomo** - [@NOMO-Gabriel](https://github.com/NOMO-Gabriel)
 
 ## License
 
