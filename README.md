@@ -107,7 +107,7 @@ After launching the OC, you have to get it PID that will be logged in the termin
 * **Igor Green Mogou** - [@IgorGreenIGM](https://github.com/IgorGreenIGM)
 * **Pacifique Nganta** - [@PacomeKFP](https://github.com/PacomeKFP)
 * **Jordan Vuide** - [@PacomeKFP](https://github.com/PacomeKFP)
-* **Nina Laissa Ntye** - [@PacomeKFP](https://github.com/PacomeKFP)
+* **Nina Laissa Ntye Ebo'o** - [@Ntye](https://github.com/Ntye)
 * **Anne Rosalie Ngo Bassom** - [@PacomeKFP](https://github.com/PacomeKFP)
 * **Gabriel Nomo** - [@NOMO-Gabriel](https://github.com/NOMO-Gabriel)
 
