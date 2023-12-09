@@ -1,0 +1,47 @@
+\subsection{Client and bike}
+Graphical clients and motorcycles are simply defined using G-client and G-bike data structures described below.
+ \begin{lstlisting}[style=customc, caption={structures for user interface}]
+#include <unistd.h>
+
+// 2D point structure
+typedef struct Point
+{
+    float x;
+    float y;
+}Point;
+
+//client's structure
+typedef struct G_client
+{
+    float radius;
+    Point* start;
+    Point* dest;
+    Point* center;
+}G_client;
+
+//bike's structure
+typedef struct G_bike
+{
+    float side;
+    Point* start;
+    Point* center;
+}G_bike;
+
+
+typedef struct G_quarters 
+{
+    int id;
+    Point *loc;
+} G_quarters;
+
+
+typedef struct G_data
+{
+    pid_t bike_pid, client_pid;
+    int bike_start;
+    int client_start, client_dest;
+
+    struct G_data* next;   
+}G_data;
+\end{lstlisting}
+We also define G-quarters structures to describe the graphic area and G-data to link a motorcycle to a client it must go to. This structure will be useful to ensure the simultaneous movement of our motorcycle and client on the interface.

@@ -1,0 +1,48 @@
+\subsection{UI}
+Just as in the scheduler, the UI needs a few data structures to store the information of the clients and motorcycles it needs to display.
+\begin{itemize}
+    
+    \item First, it maps each neighborhood from the backend, stored as an integer, to a graphical neighborhood defined by the G-quar structure mentioned above.
+    \item Then, it needs a named list of pairs \texbf{list-t} 
+    $(client,moto)$ during display.
+\end{itemize}
+The UI also needs certain functions to perform its task:
+\begin{enumarate}
+    \item The function \textbf{init-list()} creates the couple's list $(client,moto)$ for data storage.
+    \item The function \textbf{init-quarters-list()} is in charge of creating a correspondence between the quarters back-end and the quarters on the interface and then store it in the quarter-list data structure.
+    \item The function \textbf{get-quarter-pos} which allows obtaining the graphical position of a neighborhood based solely on its PID. In fact, it will search the neighborhood list to accomplish this. It returns a graphical point.
+    \item A handler \textbf{handle-oc-scheduled} which is used after each scheduling by the scheduler. It allows the UI to read the shared memory segment with the scheduler and retrieve the necessary information to move a pair. $(client,moto)$
+    \item The UI also requires specific functions to draw the clients and motorcycles, which we do not consider necessary to list here. Just note that the motorcycles will be represented as squares, while the clients will be represented as circles on the screen.
+\end{enumarate}
+Here are the function signatures for these functions:
+%stp nina regarde uneu ledernier commentaire ans le bloc de code ci-dessous j'arrive pas à bbien formuler.celui du handle%
+\newpage
+\begin{lstlisting}[style=customc, caption={functions of UI}]
+/**
+ * @brief initialize bikes and clients tuple list
+ * 
+ */
+void init_list(void)
+{
+    bikes_n_clients_list = create_list();
+}
+/** 
+ * @brief Function to create many points for display and store them in a list_quarter. 
+ * 
+ */
+void init_quaters_list() 
+/**
+ * @brief Function to find the coordinates of a quarter based on its ID. 
+ * @param id(int) 
+ * @return point 
+ */
+Point* get_quater_pos(int id)
+/**
+ * @brief handle is used to gather information about couple client-bike which now moves together. 
+ * @param signum(int) is a number of signals used to call this handler
+ * @param *info(siginfo_t) helps to gather information for the the handle
+ * @param *context is of type void 
+ */
+void handle_oc_scheduled(int signum, siginfo_t *info, void *context)
+
+\end{lstlisting}

@@ -1,0 +1,76 @@
+\documentclass{rapportECC}
+\usepackage{lipsum}
+\title{Rapport ECL - Template} %Titre du fichier
+\usepackage{lipsum} 
+\usepackage{biblatex} %Imports biblatex package
+\addbibresource{bibtex.bib} %Import the bibliography file
+\usepackage{appendix} % Package pour gérer les annexes
+\usepackage{listings}
+\usepackage{xcolor}
+\renewcommand{\contentsname}{Table of Contents}
+
+% Configuration de la coloration syntaxique avec le thème Monokai
+\lstdefinestyle{customc}{
+    backgroundcolor=\color{white},
+    basicstyle=\color{gray}\footnotesize\ttfamily,
+    commentstyle=\color{magenta},
+    keywordstyle=\color{cyan},
+    numberstyle=\tiny\color{gray},
+    stringstyle=\color{orange},
+    identifierstyle=\color{black},
+    frame=single,
+    rulecolor=\color{black},
+    breaklines=true,
+    numbers=left,
+    numbersep=5pt,
+    tabsize=4,
+    language=C,
+}
+
+
+\begin{document}
+
+% Set the space between paragraphs
+\setlength{\parskip}{7pt}
+
+%----------- Informations du rapport ---------
+
+\titre{BIKE PROJECT} %Titre du fichier .pdf
+
+%\sujet{\LaTeX Bike manager} %Nom du sujet
+
+\Encadrants{Prénom \textsc{Nom}
+          \\Prénom \textsc{Nom} } %Nom de l'enseignant
+
+\eleves{Pr Thomas \textsc{ DJOTIO NDIE} \\
+		 Mr Juslin  \textsc{KUTCHE NEGOUE}  } %Nom des élèves
+
+%----------- Initialisation ------------------- 
+        
+ \fairemarges  %Afficher les marges
+
+\fairepagedegarde %Créer la page de garde
+
+%-------------Creating the table of content------------------------
+\tableofcontents
+
+%------------ Corps du rapport ----------------
+\newpage
+\input{Sections/page1}
+\newpage
+\input{Sections/Introduction}
+\newpage
+\input{Sections/Description_of_problem}
+\newpage
+\input{Sections/Our_solution}
+\newpage
+\input{Sections/Implementation}
+\newpage
+\input{Sections/interface}
+\newpage
+\input{Sections/Test_and_evaluation}
+\newpage
+\input{Sections/conclusion}
+\newpage
+
+\end{document}

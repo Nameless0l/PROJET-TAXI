@@ -1,0 +1,35 @@
+\section{User Interface}
+To implement the interface of this project, we have opted to utilize the \textbf{OpenGL} library in the C programming language. This library proves to be highly advantageous for crafting interactive interfaces. In order to carry out this task systematically, we have chosen to break down the responsibilities into several key modules: the \textbf{Central Scheduler (CS)}, the \textbf{User Interface (UI)}, and the \textbf{Client} and {Bike} modules. This modular approach ensures effective management of each aspect of the interface, ensuring a robust design and smooth development.
+
+Furthermore, we will facilitate interaction among these different modules through interprocess communication and the use of shared memory segments. In the following sections, we will provide a detailed explanation of the work accomplished in each module and illustrate the results.
+
+
+%\begin{center}
+ %   \includegraphics[width=0.7\linewidth]{Sections/Images/fro.png}
+%\end{center}
+
+
+
+
+The following figure gives a brief summary of all what has been explicated above.
+The numbered sections 0.a, 0.b, 0.c, 0.d, 2.a and 2.b which couldn't be further explained on the figure respectively represent the following:
+
+\begin{enumerate}
+  \item \textbf{Step 0.a}:This represents the information generation and the shared memory segment creation.
+  \item \textbf{Step 0.b}: This represents the route and the shared memory segment creation.
+  \item \textbf{Step 0.c}: This part is concerned with the data initialization and listening mode from the scheduler
+  \item \textbf{Step 0.d}: This part is concerned with the initialization of the user interface
+  \item \textbf{Step 2.a}: This part is concerned with the different saving of the different bikes and clients information.
+  \item \textbf{Step 2.b}: This part is concerned with the the treatment of all the various signals by the user interface.
+\end{enumerate}
+%-----------------------------------------
+\begin{center}
+   \includegraphics[width=0.7\linewidth]{Sections/Images/fro.png}
+\end{center}
+
+
+\newpage
+\include{Sections/interface_client_and_bike}
+\newpage
+\input{Sections/interface_oc}\newpage
+\input{Sections/interface_UI}\newpage

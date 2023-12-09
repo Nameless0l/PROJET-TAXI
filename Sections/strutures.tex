@@ -1,0 +1,89 @@
+\subsection{Differents libraries,structures and data structures}
+    During the implementation of our program, different libraries, structures and data structures were used among which we can cite :
+
+\subsubsection*{libraries}
+The libraries we have utilized are:
+
+\begin{itemize}
+    \item \textbf{stdio.h} : Standard Input/Output operations.
+    \item \textbf{stdlib.h} : General utilities, including memory allocation and conversion functions.
+    \item \textbf{sys/types.h} : Definitions for various data types used in system calls.
+    \item \textbf{sys/ipc.h} : Definitions for interprocess communication using IPC.
+    \item \textbf{sys/shm.h} : Definitions and functions for shared memory operations.
+    \item \textbf{sys/signal.h} : Definitions for signal handling.
+    \item \textbf{sys/wait.h} : Declarations for wait functions.
+    \item \textbf{math.h} : Mathematical functions.
+    \item \textbf{unistd.h} : Standard symbolic constants and types, including functions like fork().
+    \item \textbf{string.h} : String manipulation functions.
+    \item \textbf{signal.h} : Signal handling functions.
+    \item \textbf{stdbool.h} : Boolean data type and values.
+    \item \textbf{sys/stat.h} : Declarations for functions and macros related to file status.
+    \item \textbf{time.h} : Time-related functions.
+    \item \textbf{glut.h} to make the user interface sing opengl functions 
+\end{itemize}
+\newpage
+\subsubsection*{ structures and data structures}
+   \begin{lstlisting}[style=customc, caption={quarter}]
+  
+    typedef enum QUARTER_YAOUNDE
+{
+    OMNISPORT,
+    POLYTECH,
+    TRAVAUX,
+    .
+    .
+    .
+    .
+    ESSOS,
+    NGOUSSO_1,
+    QUARTIER_GENERAL,
+    ECOLE_NORMALE,
+    NKOA_BANG
+} quarter;
+\end{lstlisting}    
+\begin{lstlisting}[style=customc, caption={client and bike}]
+    typedef struct client
+{
+    /*
+        Definition of a client type, which will references our process: one client is a process
+        pid is the process id of the client (as we said, it's a process)
+        start and dest are quarters, element of an enumeration of all quarters of our town
+        price in an integer which represents the price that client will pay if there is a bic that drive him to his dest
+    */
+    pid_t pid;
+    quarter start;
+    quarter dest;
+    unsigned int price;
+    time_t wait_time;
+} Client;
+\end{lstlisting}
+\newpage
+ \begin{lstlisting}[style=customc, caption={bike}]
+   
+    /*
+        Definition of a bike type, which will references our processes: one bi is a process
+        pid is the process id of the bike (as we said, it's a process)
+        itinerary is a table of  quarters, element of an enumeration of all quarters of our town
+        
+    */typedef struct Bike
+{
+   pid_t pid;
+   int *itinerary;
+}Bike;
+ //type deque
+typedef struct deque 
+{   struct block *start;
+    struct block *end;
+}deque;
+
+\end{lstlisting}
+
+\begin{itemize}
+    \item[\textbullet]The structure \textbf{quartier}: who does the correspondance between each quater and its Pid in the data structure
+    \item[\textbullet] The structure \textbf{deque} :A deque, or double-ended queue, is a type of queue in which insertion and removal of elements can be performed from both the front and the rear. This means it does not follow the FIFO (First In First Out) rule.A deque provides more flexibility by allowing operations at both ends of the queue.
+    \item[\textbullet] The strucure \textbf {Bike} : is one of the main structure of our program, the main ressource used in the program. This structure is defined as a type and its variables are : \begin{itemize}
+        \item \textbf{It's PID} which is a unique number attributed to each bike after it's creation
+        \item \textbf{It's Itinenary}: who defines the starting point of the bike and it's ending point.And we should note that an itinenary is a set of many destinations.
+    \end{itemize}
+    \item[\textbullet] The data structure \textbf{Quartier} : whose's role is to contain the name of all the quaters we will use to generate all the itinerary for our bike
+\end{itemize}

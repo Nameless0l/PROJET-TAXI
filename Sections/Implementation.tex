@@ -1,0 +1,282 @@
+\section{Implementation}
+
+In this section, we will briefly outline the implementation of our solution using the C programming language.\\ We will start by presenting the different libraries, structures and data structures which will be used.To continue, discussing the \textbf{RPG}, then delve into the \textbf{clients}, \textbf{motorcycles}, and finally, the \textbf{scheduler}.\\
+%-----------Structures explantion----------
+\input{Sections/strutures}
+\newpage
+
+%---------RPG---------------------
+\subsection{RPG (Random Process Generator)}
+To implement this RPG, we will need   enter an infinite loop, representing the total duration of the program. At random intervals, we will simultaneously create processes representing motorcycles and customers. These processes will be modified in their operation using the \textbf{exec()} function.\\
+
+The RPG, as defined earlier, is a program in which processes are created, representing either customers or motorcycles. After the creation of these processes, they will be directed to execute a binary file containing specific instructions that they will carry out.\\Here is the C code of the RPG code:%%%%%%%%%insérer le code ici%%%%%%%%%%%%
+
+\begin{lstlisting}[style=customc, caption={  code of  RPG}]
+#include <time.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#define MAX_SLEEP_TIME 2
+#define CLIENT_GENERATION_FREQ 2
+
+int main(int argc, char *argv[])
+{
+    srand(time(NULL));
+    int balance = 0;
+    while (1)
+    {
+        pid_t pid = fork();
+        if (pid == -1)
+            fprintf(stderr, "Error, cannot start neither bike or client process\n");
+
+        if (pid == 0)
+        {
+            if (balance % 2)
+            {
+                char* args[] = {"../../client/bin/client.out", argv[1], NULL};
+                execvp("../../client/bin/client.out", args);
+            }
+            else
+            {
+                char* args[] = {"../../moto/bin/bike.out", argv[1], NULL};
+                execvp("../../moto/bin/bike.out", args);
+            }
+        }
+
+        balance++;
+        sleep(5);
+    }
+
+    return 0;
+}
+
+
+\end{lstlisting}
+
+This program continuously creates processes at random intervals less than a given time T, which is a compilation parameter. Subsequently, it modifies their instructions using the \textbf{execvp()} function.using the variable balance,it create clients and bikes.
+
+\newpage
+%--------------------------------------
+
+%-------------Client---------------------
+\subsection{Clients}
+To implement the client, let's describe how to carry out each task.\\ The following provides an overview of how the client operates.\\
+
+When creating a motorcycle, the following steps are taken:
+\begin{enumerate}
+  \item \textbf{Information Generation}: Here, we use the \textbf{random();} function to generate the client's starting and ending destinations. The PID is retrieved using the \textbf{getpid();} function.\\
+  \begin{lstlisting}[style=customc, caption={random and pid functions}]
+\\random function()
+#include <stdlib.h>
+long int random(void);
+
+\\getpid()
+#include <sys/types.h>
+#include <unistd.h>
+pid_t getpid(void);
+
+
+\end{lstlisting}
+
+
+  \item \textbf{Shared Memory Segment Creation}: We create using the \textbf{shmget();} function and attach using the \textbf{shmat();} function.
+    \begin{lstlisting}[style=customc, caption={shmget and shmat functions}]
+\\shmget function()
+#include <sys/shm.h>
+int shmget(key_t key, size_t size, int shmflg);
+
+\\shmat()
+#include <sys/shm.h>
+void *shmat(int shmid, const void *shmaddr, int shmflg);
+\end{lstlisting}
+
+
+  \item \textbf{Signal Transmission to Scheduler}: It then sends a signal to the scheduler informing the completion of the initial part execution, this using the \textbf{kill();} function.\\
+    \begin{lstlisting}[style=customc, caption={kill function}]
+\\kill fuction()
+#include <signal.h>
+int kill(pid_t pid, int sig);
+
+\end{lstlisting}
+
+
+  \item \textbf{Signal Waiting}: It waits for the scheduler's signal, which continues until it reaches its limit using the \textbf{sleep();} function. If the allocated time is exceeded, the process is then terminated, a signal is sent to the scheduler, and it is removed from the list of clients using the \textbf{kill();} and \textbf{SIGNAL(int,void*);} functions.\\
+  \newpage
+    \begin{lstlisting}[style=customc, caption={sleep and signal functions}]
+\\sleep fuction()
+#include <unistd.h>
+unsigned int sleep(unsigned int seconds);
+\\SIGNAL()
+void (*signal(int sig, void (*func) (int))) (int);
+
+\end{lstlisting}
+
+  
+
+  \item \textbf{Signals Reception by the Client}: It receives a signal from the bike informing that it has been transported. At the end of the ride, it receives a signal from the bike indicating the end of the ride and terminates. This is done using the \textbf{SIGNAL} function, and it concludes with \textbf{exit(0)} if the client is dissatisfied and \textbf{exit();} if satisfied.
+\end{enumerate}
+\newpage
+%------------------------------------------
+
+
+%-------------Bike Section---------------------
+\subsection{Bike}
+The bike entity is defined by a data structure of \textbf{type def struct bike }which has its pid and itinerary as data. Its itinerary is itself an array formed of five consecutive elements from the list of neighborhoods chosen randomly.\\ To implement the Bike, we will follow the steps below:
+
+\begin{enumerate}
+
+    \item \textbf{Bike Creation }:In this step we start by allocating memory space to create the bike using the \textbf{malloc();} function. Then, the bike is initialized from a start point randomly chosen from the list of neighborhoods and incrementing the list of neighborhoods until we have five neighborhoods. The pid of the bike is retrieved using the \textbf{getpid();}function. All this bike creation is done using a function called \textbf{BikeCreation();} of type void and returns an element of type bike.% ici il y'a une impossibilité de pouvoir mettre le tiret de 8 car il faut respecter un certain encodage.
+   
+   \item \textbf{Shared Memory Segment Creation }: In this segment, the bike creates a shared memory segment using the \textbf{shmget();} function and attaches it using the \textbf{shmat();} function. In this segment, the bike writes its itinerary using the \textbf{memcpy();} function.
+   
+    \item \textbf{Signal Transmission to Scheduler}: The bike then sends a bike created signal to the scheduler using the \textbf{kill();} function. % ici il y'a une impossibilité de pouvoir mettre le tiret de 8 car il faut respecter un certain encodage.
+    
+    \item \textbf{Signal Waiting} : After sending its signal, the bike waits for a while using the \textbf{sleep();} function. A handler will be in charge of transmitting the Central Scheduler signal when the time comes.
+  
+   \item \textbf{Signal Transmission to Client} : Here, the bike reads the client’s pid in the shared memory segment and sends a signal to the client to say “I have accepted you” using the \textbf{kill();} function. Then, the process starts over.
+
+\end{enumerate}
+		
+
+\newpage
+\begin{lstlisting}[style=customc, caption={ Bike creation}]
+#include "../headers/defines.h"
+#include "../headers/signal.h"
+#include "../headers/initialisation_bikes.h"
+
+char *quartier[111] = {"Centre commercial","Elig Essono","Etoa MekiI","Nlongkak",... ,"Minkoameyos","Nkolso"
+};
+// Return a bike filled with his parameters
+Bike *create_bike(){
+    Bike *bike = (Bike*)malloc(sizeof(Bike));
+
+    // if alloc fails
+    if(!bike) return NULL;
+
+    // Generating a itinerary filled with a random of 5 consecutives quarters
+    int start = random_integer(0, NB_QUARTER - RADIUS); 
+    int* itinerary = (int*)malloc(sizeof(int) * RADIUS);
+    
+    // Filling consecutives quarters
+    for (int i = 0; i < RADIUS; i++)
+        itinerary[i] = start++;
+
+    // Filling the new bike structure
+    bike->pid = getpid(); // Getting pid process
+    bike->itinerary = itinerary;
+
+    return bike;
+}
+void write_infos_bike(Bike *bike){
+    memcpy(shm_zone, bike, sizeof(Bike));
+}
+
+\end{lstlisting}
+
+%\newpage
+
+\begin{lstlisting}[style=customc, caption={ Shared memory segment creation}]
+void create_segment(pid_t pid){
+    shm_id = shmget((key_t)pid, SEG_SIZE, IPC_CREAT | IPC_EXCL | S_IRUSR | S_IWUSR);
+    shm_zone = shmat(shm_id, NULL, 0);
+}
+\end{lstlisting}
+
+\newpage
+\begin{lstlisting}[style=customc, caption={ signals (transmission to scheduler , waiting , transmission to client)}]
+
+#include "../headers/defines.h"
+#include "../headers/signal.h"
+#include "../headers/initialisation_bikes.h"
+
+// Generate a random integer between a and b included
+int random_integer(int a, int b){
+	return (rand() % (b - a + 1)) + a;
+}
+void starting_course(pid_t client_pid){
+	kill(client_pid, STARTED_COURSE);
+}
+void ended_course(pid_t client_pid){
+	kill(client_pid, ENDED_COURSE);
+}
+
+// Receive a signal of client and read in the shm the pid of client and change a statut of moto
+void bike_handler(int signum){
+	if(signum != SEGMENT_READY)
+		return;
+
+	pid_t client_pid = *((pid_t*)shm_zone);
+	// Send a signal to precise that we are carrying a client
+	starting_course(client_pid);
+	// Time interfal for the course
+	sleep(random_integer(TASK_TIME_MIN, TASK_TIME_MAX)); 
+	// Send a signal to precise that we have ended the course
+	ended_course(client_pid);
+	// Write again bike's infos
+	write_infos_bike(bike);
+	// Resend the signal to the CS
+	send_signal(oc_pid, BIKE_CREATED);
+}
+// Atttach functions to signal
+void set_handler(){
+	signal(SEGMENT_READY, &bike_handler);
+}
+// Send signal to CS 
+void send_signal(pid_t oc_pid, int sig){
+	kill(oc_pid, sig);
+}
+\end{lstlisting}
+\newpage
+%--------------------------------------
+
+%-----------Central Schedular------------
+\subsection{Central Scheduler}
+To implement our scheduler,we are going to present step by step,the following ideas:
+\begin{enumerate}
+  \item \textbf{Data initialization}:Here we start by creating two deques one for the clients and another one for the bikes which are present. And then arm the different signal handlers.
+   \begin{lstlisting}[style=customc, caption={creation of deques}]
+// client_deque and bike deque
+ /* @brief Create a deque object
+ * @return deque* deque created
+ */
+deque *create_deque()
+{   deque *new_deque = (deque *)malloc(sizeof(deque));
+    if (new_deque == NULL) 
+    {
+        perror("Error, canot create deque\n");
+        exit(EXIT_FAILURE);
+    }
+    new_deque->start = NULL;
+    new_deque->end = NULL;
+    return new_deque;
+}
+void init_deques()
+{   bikes_deque = create_deque();
+    clients_deque = create_deque();
+}
+//type deque
+typedef struct deque 
+{   struct block *start;
+    struct block *end;
+}deque;
+
+\end{lstlisting}
+  
+  \item \textbf{Listening Mode}: The Scheduler now listens to various signals from bikes and clients for a set time t.\\
+The different signals awaited are: \textbf{CLIENT-CREATED} and \textbf{BIKE-CREATED}.\\We perform the waiting using the \textbf{signal()} function. We use handlers to process these different signals with \textbf{sig-actions}
+
+  \item \textbf{Masking of signals}: After the said time, the signals sent as of now are not taken into consideration for the following scheduler operations.
+  
+  \item \textbf{Saving Clients}: It saves the different clients into the deque saving it using the FIFO policy and same is done for the different bikes using the other deque.
+  
+  \item \textbf{Assigning Clients to Bikes}: Using the first fit protocol, the various clients are assigned to the available bikes and for this to happen, a signal is sent(with the function \textbf{kill();} ) to the chosen bike and the chosen client is removed from client deque.
+  
+  \item \textbf{Restart}: The procedure then restarts from the listening period and the masked items are added to the appropriate deques.
+\end{enumerate}
+%--------------------------------------------
+
+%------------Graphical Interface-------------
+%\subsection{Graphical Interface}
+
+%--------------------------------------------
