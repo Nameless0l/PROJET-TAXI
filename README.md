@@ -105,10 +105,10 @@ After launching the OC, you have to get it PID that will be logged in the termin
 * **Loic Ewolo Mbassi** - [@Nameless0l](https://github.com/Nameless0l)
 * **Pacome Kengali Fegue** - [@PacomeKFP](https://github.com/PacomeKFP)
 * **Igor Green Mogou** - [@IgorGreenIGM](https://github.com/IgorGreenIGM)
-* **Pacifique Nganta** - [@PacomeKFP](https://github.com/PacomeKFP)
-* **Jordan Vuide** - [@PacomeKFP](https://github.com/PacomeKFP)
+* **Pacifique Nganta** - [@Pacifique000](https://github.com/Pacifique000)
+* **Jordan Vuide** - [@whitecodename](https://github.com/whitecodename)
 * **Nina Laissa Ntye Ebo'o** - [@Ntye](https://github.com/Ntye)
-* **Anne Rosalie Ngo Bassom** - [@PacomeKFP](https://github.com/PacomeKFP)
+* **Anne Rosalie Ngo Bassom** - [@Ngo-Bassom-Anne-Rosa](https://github.com/Ngo-Bassom-Anne-Rosa)
 * **Gabriel Nomo** - [@NOMO-Gabriel](https://github.com/NOMO-Gabriel)
 
 ## License
