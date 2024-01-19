@@ -1,6 +1,6 @@
-
---![](https://www.tageblatt.lu/wp-content/uploads/archives/content/1/6/8/16893336/2/teaserbreit.jpg)
-
+<center>
+![](https://www.tageblatt.lu/wp-content/uploads/archives/content/1/6/8/16893336/2/teaserbreit.jpg)
+</center>
 #              SYSTEME D'EXPLOITATION
 ## Theme du projet : SIMULATION DU COMPORTEMENT DES 
 ## Superviseur
