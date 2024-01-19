@@ -28,11 +28,11 @@ typedef struct G_bike
 }G_bike;
 
 
-typedef struct G_quarters 
+typedef struct G_quarter 
 {
     int id;
-    Point *loc;
-} G_quarters;
+    Point *center;
+} G_quarter;
 
 
 typedef struct G_data

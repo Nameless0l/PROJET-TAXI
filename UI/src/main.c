@@ -9,22 +9,24 @@
 #include "../include/draws.h"
 #include "../include/handler.h"
 #include "../include/defines.h"
+#include "../include/quarters.h"
 
-list_t *bikes_n_clients_list;
-G_quarters** list_quarters;
+
+list_t* _global_bc_list;
+G_quarter* _global_list_quarters;
 
 int main(int argc, char* argv[])
 {
     init_list();
     init_handlers();
+    init_quarters();
     srand(time(NULL));
-    init_quaters_list();
-
-    printf("UI PID : %d \n", getpid());
-    fflush(stdout);
 
     glutInit(&argc, argv); 
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+
+    printf("UI PID : %d \n", getpid());
+    fflush(stdout);
 
     glutInitWindowSize(WIDTH * DPI_SCALE, HEIGHT * DPI_SCALE);
     glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - WIDTH * DPI_SCALE) / 2, (glutGet(GLUT_SCREEN_HEIGHT) - HEIGHT * DPI_SCALE) / 2);
@@ -38,4 +40,5 @@ int main(int argc, char* argv[])
     glutTimerFunc(10, update_pos, 0);
 
     glutMainLoop();
+    // */
 }
