@@ -25,7 +25,7 @@ int main(int argc, char **argv)
     
     printf("Central Scheduler's PID : %d\n\n", getpid());
     fflush(stdout);
-
+    sleep(30);
     while(1)
     {
         my_sleep();
