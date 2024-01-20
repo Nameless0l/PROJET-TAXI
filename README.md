@@ -28,6 +28,7 @@
 - 👤 [@Duroy51[Koghene Ladzou Eric]](https://github.com/Duroy51)
 - 👤 [@dtl06[Donchi Tresor Leroy]](https://github.com/dtl06)
 - 👤 [@NOMO-Gabriel[Nomo Bodianga Gabriel Nasaire Junior]](https://github.com/NOMO-Gabriel)
+- 👤 [@Joelndongo[Mbeya Ndongo Joel Hyacinthe]](https://github.com/Joelndongo)
 
 # BIKE PROJECT
 
