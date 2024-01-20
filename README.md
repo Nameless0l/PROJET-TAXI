@@ -262,28 +262,6 @@ After launching the OC, you have to get it PID that will be logged in the termin
 
 ![](https://github.com/Nameless0l/PROJET-TAXI/blob/master/images/Capture%20d%E2%80%99%C3%A9cran%20du%202024-01-19%2016-30-41.png?raw=true)
 
-![]()
-
-
-
-
-
-```
-- **`src/`** : Dossier contenant les fichiers source.
-  - **`main.c`** : Le fichier source principal permettant de tester le code de l'AES.
-  - **`common.c`** : Le fichier source contenant les fonctions utilitaires.
-  - **`decrypt.c`** : Le fichier source contenant les fontions necesaires au dechiffrement.
-  - **`encrypt.c`** : Le fichier source contenant des fonctions de chiffrement.
-
-- **`include/`** : Dossier contenant les fichiers d'en-tête.
-  - **`common.h`** 
-  - **`decrypt.h`**  
-  - **`encrypt.h`** 
-- **`CMakeLists.txt`** : Fichier CMake pour la configuration du projet.
-
-- **`build/`** : Dossier où les fichiers binaires seront générés par Cmake.
-- **`bin/`** : Dossier contenant egalement les fichiers de lorsqu'on compile le code sans utiliser Cmake.code sans utiliser Cmake.
-
 Resultat
 ===
 ![]()
