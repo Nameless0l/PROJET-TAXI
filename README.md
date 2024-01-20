@@ -9,7 +9,7 @@
 -👤 **`Pr DJOTIO`**
 ->[Github](https://github.com/Djotio)
 <br>
--👤 **`Dr Kuetche**
+-👤 **MSc, Ing, PhD Student Juslin KUTCHE**
 ->[Github](https://github.com/)
 ## Membres
 
