@@ -26,6 +26,7 @@
 - 👤 [@Donaldflorian[Bekono Binduga Florian Donald]](https://github.com/Donaldflorian)
 - 👤 [@Ngo-Bassom-Anne-Rosa[Ngo Bassom Anne Rosalie]](https://github.com/Ngo-Bassom-Anne-Rosa)
 - 👤 [@Duroy51[Koghene Ladzou Eric]](https://github.com/Duroy51)
+- - 👤 [@dtl06[Donchi Tresor Leroy]](https://github.com/dtl06)
 
 # BIKE PROJECT
 
