@@ -6,7 +6,10 @@
 ## Superviseur
 -👤 **`Pr DJOTIO`**
 ->[Github](https://github.com/Djotio)
-## hfghgh
+<br>
+-👤 **`Dr Kuetche**
+->[Github](https://github.com/)
+## Membres
 
 - 👤 [@Nameless[Mbassi Ewolo Loic Aron]](https://github.com/Nameless0l)
 - 👤 [@PacomeKFP[Kengali Fegue Pacome]](https://github.com/PacomeKFP)
@@ -50,32 +53,111 @@ Le projet est organisé de la manière suivante :
 ```
 📁 project_root/
 │
-├──📄 CMakeLists.txt
+├──📄 Makefile
+|
+├──📄 README
 │
-├── 📁 src/
-│   ├──📄 main.c
-│   ├──📄 common.c
-│   ├──📄 data.c
-│   ├──📄 decrypt.c
-│   └──📄 encrypt.c
+├── 📁 client/
+|    |
+|    ├──📄 Makefile
+|    | 
+|    ├── 📁 bin/
+|    │   |   
+|    │   └──📄 client.out     
+|    │
+|    ├── 📁 include/
+|    |   |
+|    │   ├──📄 client.h    
+|    │   └──📄 defines.h   
+|    |
+|    └── 📁 src/
+|        |
+|        ├──📄 client.c    
+|        └──📄 defines.c   
 │
-├── 📁 include/
-│   ├──📄 common.h
-│   ├──📄 data.h
-│   ├──📄 decrypt.h
-│   └──📄 encrypt.h
+├── 📁 moto/
+|    |
+|    ├──📄 Makefile
+|    | 
+|    ├── 📁 bin/
+|    │   |   
+|    │   └──📄 bike.out     
+|    │
+|    ├── 📁 include/
+|    |   |
+|    │   ├──📄 initialisation_bikes.h 
+|    │   ├──📄 signal.h    
+|    │   └──📄 defines.h   
+|    |
+|    └── 📁 src/
+|        |
+|        ├──📄 initialisation_bikes.c 
+|        ├──📄 signal.c    
+|        └──📄 defines.c   
 │
-├── 📁 bin/
-│   └──📄 aes               : Exécutable AES
+|
+├── 📁 RPG/
+|    |
+|    ├──📄 Makefile
+|    |
+|    ├── 📁 bin/
+|    │   |    
+|    │   └──📄 rpg.out     
+|    │
+|    |
+|    └── 📁 src/
+|        | 
+|        └──📄 rpg.c  
 │
-└── 📁 notes/
-    ├── 📁 Rapport_AES_Project/
-    │   ├──📄 rapport.md     : Notes sur Rapport en md
-    │   └──📄 rapport.md     : Notes sur pdf
+|
+├── 📁 OC/
+|    |
+|    ├──📄 Makefile
+|    | 
+|    ├── 📁 bin/
+|    │   |   defines
+|    │   └──📄 bike.out     
+|    │
+|    ├── 📁 include/
+|    |   |
+|    │   ├──📄 defines.h 
+|    │   ├──📄 gData.h
+|    │   ├──📄 handlers.h
+|    │   ├──📄 oc.h    
+|    │   └──📄 shared.h   
+|    |
+|    └── 📁 src/
+|        |
+|        ├──📄 defines.c 
+|        ├──📄 gData.c 
+|        ├──📄 handlers.c 
+|        ├──📄 oc.c    
+|        └──📄 shared.c  
+│
+│  
+│ 
+└── 📁 UI/
+    ├── 📁 bin/
+    │   ├──📄 oc.out    
+    │   └──📄 ui.out     
     │
-    └── 📁 exercices/
-        ├──📄 exercice 1.md   : Le makdown
-        └──📄 exercice 1.docx   : 
+    ├── 📁 include/
+    │   ├──📄 defines.h
+    │   ├──📄 draws.h
+    │   ├──📄 gstructs.h
+    │   ├──📄 handlers.h
+    │   ├──📄 list.h
+    │   ├──📄 quarters.h
+    │   └──📄 ui.h 
+    |
+    └── 📁 src/
+        ├──📄 defines.c
+        ├──📄 draws.c
+        ├──📄 gstructs.c
+        ├──📄 handlers.c
+        ├──📄 list.c
+        ├──📄 quarters.c
+        └──📄 ui.c 
 
 ```
 
@@ -158,7 +240,7 @@ Open another terminal another terminal to launch the OC
 ```bash
 ./OC/bin/oc.out <ui_pid>
 ```
-
+![](https://github.com/Nameless0l/PROJET-TAXI/blob/master/images/rpg.png?raw=true)
 After launching the OC, you have to get it PID that will be logged in the terminal and then launch the RPG with it as args
 
 * **Launch the RPG**:Open another terminal at the root of the project and type these command
@@ -170,18 +252,18 @@ After launching the OC, you have to get it PID that will be logged in the termin
 
 
 
+
 ### 💡resultat
 
 
 
-![](https://github.com/Nameless0l/PROJET-TAXI/blob/master/images/Capture%20d%E2%80%99%C3%A9cran%20du%202024-01-19%2016-31-05.png?raw=true)
+
 ![](https://github.com/Nameless0l/PROJET-TAXI/blob/master/images/Capture%20d%E2%80%99%C3%A9cran%20du%202024-01-19%2016-30-41.png?raw=true)
 
 ![]()
 
 
-Ce projet a été développé dans le cadre du cours [SI] pour implementer l'algorithme de chiffrement avancé (AES) en langage C. L'objectif principal était de comprendre et de mettre en œuvre les étapes de l'algorithme AES, y compris le chiffrement et le déchiffrement. Dans notre travail nous implementons AES 128 bits
-Pour le faire nous avons eu besoin de la structure suivante pour le code source
+
 
 
 ```
