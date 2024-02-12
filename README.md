@@ -10,7 +10,7 @@
 ->[Github](https://github.com/Djotio)
 <br>
 -👤 **MSc, Ing, PhD Student Juslin KUTCHE**
-->[Github](https://github.com/)
+->[Github](https://github.com/juslin)
 ## Membres
 
 - 👤 [@Nameless[Mbassi Ewolo Loic Aron]](https://github.com/Nameless0l)
